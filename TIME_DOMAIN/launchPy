@@ -1,0 +1,14 @@
+#!/bin/bash
+# Script PYTHON compilation and execution
+
+#clear
+##set echo
+#
+
+echo "************************************************************************"
+echo "Executing " $1.py
+
+python $1.py
+
+echo "-> Le job" $1 "est de retour, Ciao \!"
+echo "************************************************************************"

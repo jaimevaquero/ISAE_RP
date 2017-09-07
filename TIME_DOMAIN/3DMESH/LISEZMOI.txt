@@ -1,0 +1,7 @@
+OBJECTIFS :
+ 
+- Verifier temps de calcul avec TAU_P bien choisit, et avec mal choisit (donc avec appel bisection)
+- Incorporer Newton raphson et la dichotomie dans BLab isopoussée ! Et mieux choisir TAU_P initial 
+- eventuellement mettre meilleur critere de choix de l'appel bisection plutot que le nn_bounds 20.
+
+joyeux noel.
