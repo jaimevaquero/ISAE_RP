@@ -8,8 +8,9 @@
 # ****************************************************************************
 import numpy as np
 
-
+##################################################################
 def ReadSurface3D(x,y,z,variables,Cartesian=True):
+    Ni = len(x)/3
     if (type(variables) is not list):
         variablesList = []
         varibalesList.append(variables)
@@ -17,22 +18,30 @@ def ReadSurface3D(x,y,z,variables,Cartesian=True):
     variables.append(x)
     variables.append(y)
     variables.append(z)
+
+    Ncol = len(variables)
     if (Cartesian == True):
         print(' ReadSurface3D: using cartesian coordinates')
         outputSortedZ  = SortData(variables,z)
-        #i = 0
-        #while outputSortedZ[-1][i] == outputSortedZ[-1][0]:
-        #    i = i + 1
-        #ilast = i-1
-        tempSortedZ,ilast    = TemporalListOfArrays(outputSortedZ,9)
-        tempSortedZX   = SortData(tempSortedZ ,tempSortedZ [-2])
-        tempSortedZXY  = SortData(tempSortedZX,tempSortedZX[-3])
-        print(tempSortedZX)
-        print(tempSortedZXY)
+        outputSortedZXY = []
+        ilast = -1
+        while (ilast<Ni*3-1):
+            print(ilast,Ni)
+            tempSortedZ,ilast    = TemporalListOfArrays(outputSortedZ,ilast+1)
+            print(ilast,Ni)
+            tempSortedZX   = SortData(tempSortedZ ,tempSortedZ [-2])
+            tempSortedZXY  = SortData(tempSortedZX,tempSortedZX[-3])
+            for s in tempSortedZXY:
+                outputSortedZXY.append(s)
+        finalList = []
+        for j in range(0,Ncol):
+            finalList.append(outputSortedZXY[j::Ncol])
+        print(finalList)    
     else: 
         print(' ReadSurface3D: using cylindrical coordinates')
         outputSortedZ  = SortData(variables,z)
-    return outputSortedZ
+
+    return outputSortedZXY
 
 
 def SortData(variables,sortingVariable):
@@ -49,7 +58,7 @@ def SortData(variables,sortingVariable):
 
 def TemporalListOfArrays(OriginalList,startindex):
     i = startindex
-    while OriginalList[-1][i] == OriginalList[-1][startindex]:
+    while (i < len(OriginalList[-1]) and OriginalList[-1][i] == OriginalList[-1][startindex]):
         i = i + 1
     endindex = i-1
     TemporalList = []
@@ -60,6 +69,7 @@ def TemporalListOfArrays(OriginalList,startindex):
         TemporalList.append(x2)
 
     return TemporalList,endindex
+############################################################
 
 file1 = open('Libro1.txt','r')
 file1r = file1.read().split()
@@ -86,5 +96,6 @@ variables.append(u)
 variables.append(v)
 jaja = ReadSurface3D(x,y,z,variables)
 print('')
+print(' Final List: ')
 for i in range(len(jaja)):
     print((jaja[i]))
